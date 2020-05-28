@@ -5,14 +5,16 @@ class ResponsiveContainer extends StatelessWidget {
   final Widget Function(BuildContext context, bool isTablet) masterBuilder;
   final Widget detailScreen;
 
-  const ResponsiveContainer({@required this.masterBuilder, @required this.detailScreen});
+  const ResponsiveContainer(
+      {@required this.masterBuilder, @required this.detailScreen});
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
-      final flex =
-          constraints.maxWidth < 820 ? _MasterDetailFlex(1, 1) : _MasterDetailFlex(2, 4);
-      if (isTabletConstraints(constraints)) {
+      final flex = constraints.maxWidth < 820
+          ? _MasterDetailFlex(1, 1)
+          : _MasterDetailFlex(2, 4);
+      if (!isTabletConstraints(constraints)) {
         return Flex(
           direction: Axis.horizontal,
           children: [
@@ -38,10 +40,10 @@ class _MasterDetailFlex {
   _MasterDetailFlex(this.master, this.detail);
 }
 
-
 const TABLET_EXT = 700;
 
-bool isTablet(BuildContext context) => MediaQuery.of(context).size.width >= TABLET_EXT;
+bool isTablet(BuildContext context) =>
+    MediaQuery.of(context).size.width >= TABLET_EXT;
 
 bool isTabletConstraints(BoxConstraints constraints) =>
     constraints.maxWidth >= TABLET_EXT;

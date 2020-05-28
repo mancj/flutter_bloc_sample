@@ -1,20 +1,24 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'list_screen.dart';
+
 class DetailPage extends StatelessWidget {
-  int itemIndex;
-
-  DetailPage(this.itemIndex);
-
   @override
   Widget build(BuildContext context) {
-    final bloc = DetailBloc()..add(DetailEvent(itemIndex));
-    return BlocProvider(
-      create: (context) {
-        return bloc;
-      },
-      child: Center(child: DetailScreen()),
+    return BlocProvider<DetailBloc>(
+      create: (_) => DetailBloc(),
+      child: Builder(builder: (context) {
+        return BlocListener<ListBloc, ListState>(
+          listener: (_, state) =>
+              context.bloc<DetailBloc>()..add(DetailEvent(state.itemIndex)),
+          child: Center(
+            child: DetailScreen(),
+          ),
+        );
+      }),
     );
   }
 }
@@ -22,9 +26,15 @@ class DetailPage extends StatelessWidget {
 class DetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<DetailBloc, DetailState>(builder: (context, state) {
-      return Text("Item detail ${state.itemIndex}");
-    });
+    return Container(
+      color: Colors.blue,
+      child: BlocBuilder<DetailBloc, DetailState>(builder: (context, state) {
+        return Text(
+          "Item detail ${state.itemIndex}",
+          style: TextStyle(color: Colors.white),
+        );
+      }),
+    );
   }
 }
 
@@ -41,7 +51,7 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
 }
 
 class DetailEvent extends Equatable {
-  int itemIndex;
+  final int itemIndex;
 
   @override
   List<Object> get props => [itemIndex];
@@ -50,7 +60,7 @@ class DetailEvent extends Equatable {
 }
 
 class DetailState extends Equatable {
-  int itemIndex;
+  final int itemIndex;
 
   @override
   List<Object> get props => [itemIndex];

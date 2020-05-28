@@ -17,15 +17,18 @@ class ListScreen extends StatelessWidget {
               return ListView.builder(
                 itemBuilder: (context, index) {
                   return Container(
+                      color: Colors.white,
                       padding: EdgeInsets.all(16),
                       child: GestureDetector(
                         behavior: HitTestBehavior.opaque,
-                        onTap: () =>
-                            BlocProvider.of<ListBloc>(context).add(ListEvent(index)),
+                        onTap: () => BlocProvider.of<ListBloc>(context)
+                            .add(ListEvent(index)),
                         child: Text(
                           "Item $index",
                           style: TextStyle(
-                            color: state.itemIndex == index ? Colors.grey : Colors.black,
+                            color: state.itemIndex == index
+                                ? Colors.grey
+                                : Colors.black,
                           ),
                         ),
                       ));
@@ -33,7 +36,7 @@ class ListScreen extends StatelessWidget {
                 itemCount: 10,
               );
             },
-            detailScreen: DetailPage(state.itemIndex),
+            detailScreen: DetailPage(),
           ),
         ),
       ),
@@ -54,7 +57,7 @@ class ListBloc extends Bloc<ListEvent, ListState> {
 class ListEvent extends Equatable {
   @override
   List<Object> get props => [itemIndex];
-  int itemIndex;
+  final int itemIndex;
 
   ListEvent(this.itemIndex);
 }
@@ -62,7 +65,7 @@ class ListEvent extends Equatable {
 class ListState extends Equatable {
   @override
   List<Object> get props => [itemIndex];
-  int itemIndex;
+  final int itemIndex;
 
   ListState(this.itemIndex);
 }
